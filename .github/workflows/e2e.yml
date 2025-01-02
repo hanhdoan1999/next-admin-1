@@ -1,0 +1,54 @@
+name: E2E, Lint & Unit tests
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Enable corepack
+        run: corepack enable
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - name: Cache playwright dependencies
+        id: cache-playwright
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - name: Start docker-compose
+        run: docker compose up -d
+      - name: Install dependencies
+        run: pnpm install
+      - name: Setup packages (Build)
+        run: pnpm setup:packages
+      - name: Run linter
+        run: pnpm lint
+      - name: Run typecheck
+        run: pnpm typecheck
+      - name: Install playwright dependencies
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+      - name: Fill database
+        run: pnpm database
+      - name: Build packages
+        run: pnpm build:example
+      - name: Start server
+        run: pnpm start:example &
+      - name: Run tests
+        run: |
+          pnpm test
+          pnpm turbo test:e2e 
+          cd apps/example && pnpm prisma db seed && cd -
+          BASE_URL=http://localhost:3000/pagerouter/admin pnpm test:e2e
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

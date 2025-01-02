@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    postgres:
+        image: postgres:14
+        restart: always
+        environment:
+            POSTGRES_USER: next-admin
+            POSTGRES_PASSWORD: next-admin
+            POSTGRES_DB: next-admin
+        ports:
+            - 5432:5432
+        volumes:
+            - postgresql:/var/lib/postgresql
+            - postgresql_data:/var/lib/postgresql/data
+    
+    mysql:
+        image: mariadb:10.8.3
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: next-admin
+            MYSQL_DATABASE: next-admin
+            MYSQL_USER: next-admin
+            MYSQL_PASSWORD: next-admin
+        ports:
+            - 3306:3306
+
+volumes:
+    postgresql:
+    postgresql_data:

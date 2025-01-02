@@ -1,0 +1,42 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local", "**/.env"],
+  "globalEnv": [
+    "NODE_ENV",
+    "BASE_URL",
+    "BASE_DOMAIN",
+    "POSTGRES_PRISMA_URL",
+    "POSTGRES_URL_NON_POOLING"
+  ],
+  "tasks": {
+    "start": {},
+    "@premieroctet/next-admin#build": {
+      "dependsOn": ["example#generate"]
+    },
+    "example#generate": {
+      "dependsOn": ["@premieroctet/next-admin-generator-prisma#build"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {},
+    "test:coverage": {},
+    "test:e2e": {},
+    "database": {},
+    "typecheck": {},
+    "reset-database": {
+      "cache": false
+    },
+    "clean": {},
+    "generate": {}
+  },
+  "ui": "stream"
+}
