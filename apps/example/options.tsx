@@ -5,6 +5,8 @@ import DatePicker from "./components/DatePicker";
 import PasswordInput from "./components/PasswordInput";
 import { prisma } from "./prisma";
 
+
+
 export const options: NextAdminOptions = {
   title: "⚡️ My Admin",
   model: {
@@ -336,44 +338,172 @@ export const options: NextAdminOptions = {
         },
       },
     },
+    Game: {
+      toString: (game) => `${game.title}`,
+      title: "Game",
+      icon: "RocketLaunchIcon",
+      aliases: {
+        game_id: "ID",
+        title: "Title",
+        description: "Description",
+        deeplink_url: "Deeplink"
+      },
+      list: {
+        display: ["game_id", "title", "description", "deeplink_url"],
+        search: ["title"],
+        copy: ["title"],
+      },
+    },
+    Account: {
+    title: "Accounts",
+    icon: "UserIcon",
+    toString: (account) => `${account.arcade_username || account.email || account.wallet_address}`,
+    list: {
+      display: ["arcade_username", "wallet_address", "email", "created_at"],
+    },
+    edit: {
+      display: ["arcade_username", "wallet_address", "email", "id_token", "verifier_id", "created_at", "updated_at"],
+    },
+    },
     Profile: {
       title: "Profiles",
-      icon: "UserIcon",
+      icon: "UserCircleIcon",
+      toString: (profile) => `${profile.x_handle || profile.discord_handle || profile.telegram_handle}`,
       list: {
-        display: ["id", "user"],
+        display: ["account_id", "x_handle", "discord_handle", "telegram_handle", "is_receive_notification", "created_at"],
       },
       edit: {
-        display: ["user", "bio"],
+        display: ["account_id", "display_picture", "x_handle", "discord_handle", "telegram_handle", "is_receive_notification", "created_at", "updated_at"],
       },
     },
-  },
-  pages: {
-    "/custom": {
-      title: "Custom page",
-      icon: "PresentationChartBarIcon",
+    PlayerLaunchGame: {
+      title: "Player Launch Games",
+      icon: "FireIcon",
+      toString: (playerLaunchGame) => `${playerLaunchGame.player_game_id}`,
+      list: {
+        display: ["account_id", "game_id", "timestamp_of_last_launch", "created_at"],
+      },
+      edit: {
+        display: ["account_id", "game_id", "timestamp_of_last_launch", "created_at", "updated_at"],
+      },
     },
+    Blockchain: {
+      title: "Blockchains",
+      icon: "CubeIcon",
+      toString: (blockchain) => `${blockchain.blockchain_name}`,
+      list: {
+        display: ["blockchain_name", "created_at", "updated_at"],
+      },
+      edit: {
+        display: ["blockchain_name", "blockchain_logo", "created_at", "updated_at"],
+      },
+    },
+    GameTag: {
+      title: "Game Tags",
+      icon: "TagIcon",
+      toString: (gameTag) => `${gameTag.game_tag_description}`,
+      list: {
+        display: ["game_tag_description", "created_at", "updated_at"],
+      },
+      edit: {
+        display: ["game_tag_description", "created_at", "updated_at"],
+      },
+    },
+    GameTagRelation: {
+      title: "Game Tag Relations",
+      icon: "LinkIcon",
+      toString: (gameTagRelation) => `${gameTagRelation.game_id} - ${gameTagRelation.game_tag_id}`,
+      list: {
+        display: ["game_id", "game_tag_id", "created_at", "updated_at"],
+      },
+      edit: {
+        display: ["game_id", "game_tag_id", "created_at", "updated_at"],
+      },
+    },
+    GameSection: {
+      title: "Game Sections",
+      icon: "Square2StackIcon",
+      toString: (gameSection) => `${gameSection.title}`,
+      list: {
+        display: ["title", "order_index", "created_at", "updated_at"],
+      },
+      edit: {
+        display: ["title", "order_index", "created_at", "updated_at"],
+      },
+    },
+    GameSectionRelation: {
+      title: "Game Section Relations",
+      icon: "LinkIcon",
+      toString: (gameSectionRelation) => `${gameSectionRelation.game_id} - ${gameSectionRelation.game_section_id}`,
+      list: {
+        display: ["game_id", "game_section_id", "game_order_in_section", "created_at", "updated_at"],
+      },
+      edit: {
+        display: ["game_id", "game_section_id", "game_order_in_section", "created_at", "updated_at"],
+      },
+    },
+    GamePlatform: {
+      title: "Game Platforms",
+      icon: "CubeTransparentIcon",
+      toString: (gamePlatform) => `${gamePlatform.game_platform_name}`,
+      list: {
+        display: ["game_platform_name", "created_at", "updated_at"],
+      },
+      edit: {
+        display: ["game_platform_name", "game_platform_logo", "created_at", "updated_at"],
+      },
+    },
+    GamePlatformRelation: {
+      title: "Game Platform Relations",
+      icon: "LinkIcon",
+      toString: (gamePlatformRelation) => `${gamePlatformRelation.game_id} - ${gamePlatformRelation.game_platform_id}`,
+      list: {
+        display: ["game_id", "game_platform_id", "created_at", "updated_at"],
+      },
+      edit: {
+        display: ["game_id", "game_platform_id", "created_at", "updated_at"],
+      },
+    },
+    GameMedia: {
+      title: "Game Media",
+      icon: "PhotoIcon",
+      toString: (gameMedia) => `${gameMedia.game_id} - ${gameMedia.file_type}`,
+      list: {
+        display: ["game_id", "medium_url", "file_type", "created_at", "updated_at"],
+      },
+      edit: {
+        display: ["game_id", "medium_url", "file_type", "created_at", "updated_at"],
+      },
+    },
+  
   },
+  // pages: {
+  //   "/custom": {
+  //     title: "Custom page",
+  //     icon: "PresentationChartBarIcon",
+  //   },
+  // },
   sidebar: {
     groups: [
       {
-        title: "Users",
-        models: ["User", "Profile"],
+        title: "",
+        models: ["User", "Game", "Account", "Profile", "PlayerLaunchGame", "Blockchain", "GameTag", "GameTagRelation", "GameSection", "GameSectionRelation", "GamePlatform", "GamePlatformRelation", "GameMedia"],
       },
-      {
-        title: "Categories",
-        models: ["Category"],
-      },
+      // {
+      //   title: "Categories",
+      //   models: ["Category"],
+      // },
     ],
   },
-  externalLinks: [
-    {
-      label: "Documentation",
-      url: "https://next-admin.js.org",
-    },
-    {
-      label: "Page Router",
-      url: "/pagerouter/admin",
-    },
-  ],
+  // externalLinks: [
+  //   {
+  //     label: "Documentation",
+  //     url: "https://next-admin.js.org",
+  //   },
+  //   {
+  //     label: "Page Router",
+  //     url: "/pagerouter/admin",
+  //   },
+  // ],
   defaultColorScheme: "dark",
 };
