@@ -13,6 +13,7 @@ Init db
 ```bash
 docker-compose up
 pnpm prisma migrate dev && pnpm prisma db seed
+pnpm prisma db push
 ```
 
 Open [http://localhost:3000/admin](http://localhost:3000/admin) to see the admin
