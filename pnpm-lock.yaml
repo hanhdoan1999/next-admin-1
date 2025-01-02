@@ -115,10 +115,10 @@ importers:
         specifier: ^1.5.7
         version: 1.5.13
       '@premieroctet/next-admin':
-        specifier: ^7.1.1
+        specifier: workspace:*
         version: link:../../packages/next-admin
       '@premieroctet/next-admin-generator-prisma':
-        specifier: ^0.0.1
+        specifier: workspace:*
         version: link:../../packages/generator-prisma
       '@prisma/client':
         specifier: 5.14.0
