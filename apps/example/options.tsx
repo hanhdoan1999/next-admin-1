@@ -398,7 +398,18 @@ export const options: NextAdminOptions = {
         fields: {
           account_id: {
           },
-        }
+        },
+        hooks: {
+          beforeDb: async (data, mode, request) => {
+            console.log(data);
+            // const newPassword = data.newPassword;
+            // if (newPassword) {
+            //   data.hashedPassword = `hashed-${newPassword}`;
+            // }
+
+            return data;
+          },
+        },
       }
     },
     PlayerLaunchGame: {
